@@ -16,3 +16,4 @@ GRANT SELECT ON ALL TABLES IN SCHEMA public TO debezium;
 
 kubectl exec -it <postgres-pod-name> -- psql -U debezium -d postgres
 kubectl get secret <secret-name> -o jsonpath="{.data.postgresql-password}" | base64 --decode
+kubectl get secret <secret-name> -o jsonpath="{.data.postgresql-password}" | base64 --decode
