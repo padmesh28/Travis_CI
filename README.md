@@ -10,3 +10,8 @@ sql
 Copy code
 CREATE USER debezium REPLICATION LOGIN CONNECTION LIMIT 2 ENCRYPTED PASSWORD 'debezium_pass';
 GRANT SELECT ON ALL TABLES IN SCHEMA public TO debezium;
+
+CREATE USER debezium WITH REPLICATION LOGIN ENCRYPTED PASSWORD 'your_password_here';
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO debezium;
+
+kubectl exec -it <postgres-pod-name> -- psql -U debezium -d postgres
