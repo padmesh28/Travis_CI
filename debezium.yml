@@ -1,0 +1,54 @@
+FROM bitnami/kafka:latest
+
+# Add Debezium connector plugins
+RUN mkdir -p /kafka/plugins
+ADD https://repo1.maven.org/maven2/io/debezium/debezium-connector-mysql/1.8.0.Final/debezium-connector-mysql-1.8.0.Final-plugin.tar.gz /kafka/plugins/
+RUN tar -xvzf /kafka/plugins/debezium-connector-mysql-1.8.0.Final-plugin.tar.gz -C /kafka/plugins/
+
+# Set the plugin path environment variable
+ENV CONNECT_PLUGIN_PATH="/kafka/plugins"
+
+docker build -t yourdockerhubusername/kafka-connect-with-debezium:latest .
+docker push yourdockerhubusername/kafka-connect-with-debezium:latest
+
+helm create kafka-connect
+
+image:
+  repository: yourdockerhubusername/kafka-connect-with-debezium
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8083
+
+configuration: |
+  bootstrap.servers=KAFKA-SVC:9092
+  group.id=connect-cluster
+  key.converter=org.apache.kafka.connect.json.JsonConverter
+  value.converter=org.apache.kafka.connect.json.JsonConverter
+  config.storage.topic=connect-configs
+  offset.storage.topic=connect-offsets
+  status.storage.topic=connect-statuses
+  plugin.path=/kafka/plugins
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: 8083
+readinessProbe:
+  httpGet:
+    path: /
+    port: 8083
+
+
+helm install kafka-connect ./kafka-connect
+kubectl logs -f <kafka-connect-pod-name>
+kubectl get pods
+
+curl -X POST -H "Content-Type: application/json" --data @your-connector-config.json http://<kafka-connect-service>:8083/connectors
+
+#############
+docker run --rm -it -p 8083:8083 yourdockerhubusername/kafka-connect-with-debezium:latest
+
+helm install kafka-connect ./kafka-connect --debug --dry-run
