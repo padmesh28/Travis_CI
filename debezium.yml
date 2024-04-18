@@ -1,8 +1,16 @@
 FROM bitnami/kafka:latest
-# Add Debezium connector plugins for PostgreSQL
-RUN mkdir -p /kafka/plugins
-ADD https://repo1.maven.org/maven2/io/debezium/debezium-connector-postgres/1.8.0.Final/debezium-connector-postgres-1.8.0.Final-plugin.tar.gz /kafka/plugins/
-RUN tar -xvzf /kafka/plugins/debezium-connector-postgres-1.8.0.Final-plugin.tar.gz -C /kafka/plugins/
+
+# Use a directory where the non-root user has permissions
+RUN mkdir -p /opt/bitnami/kafka/plugins
+
+# Download and extract the Debezium PostgreSQL Connector into the plugins directory
+ADD https://repo1.maven.org/maven2/io/debezium/debezium-connector-postgres/1.8.0.Final/debezium-connector-postgres-1.8.0.Final-plugin.tar.gz /opt/bitnami/kafka/plugins/
+RUN tar -xvzf /opt/bitnami/kafka/plugins/debezium-connector-postgres-1.8.0.Final-plugin.tar.gz -C /opt/bitnami/kafka/plugins/ && \
+    rm /opt/bitnami/kafka/plugins/debezium-connector-postgres-1.8.0.Final-plugin.tar.gz
+
+# Set the plugin path environment variable
+ENV CONNECT_PLUGIN_PATH="/opt/bitnami/kafka/plugins"
+
 
 # Set the plugin path environment variable
 ENV CONNECT_PLUGIN_PATH="/kafka/plugins"
