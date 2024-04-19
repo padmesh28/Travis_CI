@@ -69,6 +69,7 @@ curl -X POST -H "Content-Type: application/json" --data @debezium-connector.json
 curl http://kafka-connect:8083/connectors/postgres-connector/status
 
 
+kubectl run kafka-client -n kafka-connect-tutorial --restart='Never' --image bitnami/kafka:latest --requests='cpu=100m,memory=128Mi' --limits='cpu=200m,memory=256Mi' --command -- sleep infinity
 
 
 
