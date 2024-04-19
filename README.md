@@ -68,3 +68,11 @@ helm upgrade my-kafka bitnami/kafka -f values.yaml
 curl -X POST -H "Content-Type: application/json" --data @debezium-connector.json http://kafka-connect:8083/connectors
 curl http://kafka-connect:8083/connectors/postgres-connector/status
 
+
+
+
+
+
+kubectl run kafka-client -n kafka-connect-tutorial --restart='Never' --image bitnami/kafka:latest --command -- sleep infinity
+kubectl exec -it kafka-client -n kafka-connect-tutorial -- kafka-topics --bootstrap-server dev-sandbox-kafka--service:9092 --topic connect-offsets --create --partitions 1 --replication-factor 1
+
