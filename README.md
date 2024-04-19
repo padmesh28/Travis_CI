@@ -83,3 +83,9 @@ kubectl exec -it kafka-client -n kafka-connect-tutorial -- kafka-topics --bootst
 
 kubectl run kafka-client -n kafka-connect-tutorial --restart='Never' --image bitnami/kafka:latest --requests='cpu=100m,memory=128Mi' --limits='cpu=200m,memory=256Mi' --command -- sleep infinity
 
+
+security.protocol=SASL_PLAINTEXT
+sasl.mechanism=PLAIN
+sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule required username="<username>" password="<password>";
+
+
