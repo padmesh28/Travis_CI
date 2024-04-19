@@ -88,4 +88,5 @@ security.protocol=SASL_PLAINTEXT
 sasl.mechanism=PLAIN
 sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule required username="<username>" password="<password>";
 
+kafka-topics --bootstrap-server dev-sandbox-kafka--service:9092 --create --topic my-topic --partitions 1 --replication-factor 1 --command-config client-sasl-plain.properties
 
