@@ -80,3 +80,6 @@ kubectl run kafka-client -n kafka-connect-tutorial --restart='Never' --image bit
 kubectl run kafka-client -n kafka-connect-tutorial --restart='Never' --image bitnami/kafka:latest --command -- sleep infinity
 kubectl exec -it kafka-client -n kafka-connect-tutorial -- kafka-topics --bootstrap-server dev-sandbox-kafka--service:9092 --topic connect-offsets --create --partitions 1 --replication-factor 1
 
+
+kubectl run kafka-client -n kafka-connect-tutorial --restart='Never' --image bitnami/kafka:latest --requests='cpu=100m,memory=128Mi' --limits='cpu=200m,memory=256Mi' --command -- sleep infinity
+
