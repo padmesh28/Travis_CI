@@ -25,6 +25,9 @@ RUN confluent-hub install --no-prompt debezium/debezium-connector-postgresql:lat
 USER kafka
 
 
+kubectl run kafka-client -n kafka-connect-tutorial --restart='Never' --image bitnami/kafka:latest --requests='cpu=100m,memory=128Mi' --limits='cpu=200m,memory=256Mi' --command -- sleep infinity
+
+
 
 kafkaConnect:
   enabled: true
